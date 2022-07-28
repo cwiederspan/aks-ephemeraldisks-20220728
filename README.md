@@ -19,11 +19,30 @@ az aks create \
 --node-count 1 \
 --generate-ssh-keys
 
-
 az aks get-credentials -n $BASENAME -g $BASENAME
 
+```
+
+## Deploy the Local Storage Provisioner and Storage Class
+
+Based on the documentation for the [AKS Local Volume Support](https://github.com/Azure/kubernetes-volume-drivers/tree/master/local).
+
+```bash
+
+# Create the StorageClass
+# Take note of line #5 that names the StorageClass, in this case "local-disk".
+kubectl apply -f local-pv-storageclass.yaml
+
+# Install the local volume static provisioner
+kubectl apply -f local-pv-provisioner-tempdisk.yaml
+
+# Install the demo app
+# Note line #22 that references the same StorageClass (local-disk) mentioned above
+kubectl apply -f deployment.yaml
 
 ```
+
+## Miscellaneous
 
 ```bash
 
